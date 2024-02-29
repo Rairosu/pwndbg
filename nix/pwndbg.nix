@@ -4,6 +4,7 @@
   , gdb ? pkgs.gdb
   , inputs ? null
   , extraWrapperArgs ? ""
+  , extraPythonPackages ? {}
 }:
 let
   binPath = pkgs.lib.makeBinPath ([
@@ -32,7 +33,7 @@ let
           substituteInPlace setup.py --replace manylinux1 manylinux2014
         '';
       });
-    });
+    } // extraPythonPackages);
   };
 
   pwndbgVersion = pkgs.lib.readFile (pkgs.runCommand "pwndbgVersion" {

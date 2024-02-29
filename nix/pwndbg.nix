@@ -3,6 +3,7 @@
   , python3 ? pkgs.python3
   , gdb ? pkgs.gdb
   , inputs ? null
+  , extraWrapperArgs ? ""
 }:
 let
   binPath = pkgs.lib.makeBinPath ([
@@ -65,8 +66,10 @@ let
       makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
         --add-flags "--quiet --early-init-eval-command=\"set charset UTF-8\" --early-init-eval-command=\"set auto-load safe-path /\" --command=$out/share/pwndbg/gdbinit.py" \
         --prefix PATH : ${binPath} \
-        --set LC_CTYPE C.UTF-8
+        --set LC_CTYPE C.UTF-8 \
+        ${extraWrapperArgs}
     '';
+
 
     meta = {
       python3 = python3;

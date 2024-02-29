@@ -38,11 +38,15 @@
       };
     in
   {
-      packages = forAllSystems (system: {
-          pwndbg = import ./nix/pwndbg.nix {
-            pkgs = pkgsBySystem.${system};
-            python3 = pkgsBySystem.${system}.python3;
-            gdb = pkgsBySystem.${system}.gdb;
+      packages = forAllSystems (system: 
+      let
+        pkgs = pkgsBySystem.${system};
+      in
+        {
+          pwndbg = pkgs.callPackage ./nix/pwndbg.nix {
+            inherit pkgs;
+            python3 = pkgs.python3;
+            gdb = pkgs.gdb;
             inputs.pwndbg = self;
           };
           default = self.packages.${system}.pwndbg;
